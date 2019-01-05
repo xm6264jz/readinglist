@@ -1,7 +1,7 @@
 
 class Menu:
 
-    """ Represents a set of menu options. Each option has a key or string the userp
+    """ Represents a set of menu options. Each option has a key or string the user
     should press to select it, a text description, and the function to be invoked for that choice.
     The keys the user presses are unique within a menu. """
 
@@ -11,11 +11,11 @@ class Menu:
 
 
     def add_option(self, key, description, func):
-        """ Add or replaces an option to this menu. If another option with the same key is added, it will overwrite the existing one.
+        """ Add or replaces an option to this menu.
+        If another option with the same key is already present, it will be overwritten.
         :param key: the key the user should press to select this option. Can be a single character or a string
         :param description: a text description of the menu option
         :param func: the function that should be invoked when the user selects this option """
-
         self.text_descriptions[key] = description
         self.functions[key] = func
 
