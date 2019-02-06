@@ -168,7 +168,7 @@ class TestBookstore(TestCase):
 
     def test_search_book_case_insensitive_author_match(self):
         self.add_test_data()
-        self.assertCountEqual([self.bk1, self.bk2], self.BS.book_search('cReAtOr'))
+        self.assertCountEqual([self.bk3], self.BS.book_search('cReAtOr'))
 
 
     def test_exact_match_found(self):
