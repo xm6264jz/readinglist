@@ -62,7 +62,6 @@ class TestBookstore(TestCase):
             bk_dupe.save()
        
 
-
     def test_get_book_by_id_found(self):
         self.add_test_data()
         result = self.BS.get_book_by_id(self.bk1.id)
@@ -70,6 +69,7 @@ class TestBookstore(TestCase):
 
 
     def test_get_book_by_id_not_found(self):
+        # This test fails - student should fix 
         self.add_test_data()
         result = self.BS.get_book_by_id(-1)
         self.assertIsNone(result)
