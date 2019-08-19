@@ -1,13 +1,10 @@
 """ Program to create and manage a list of books that the user wishes to read, and books that the user has read. """
 
-from bookstore import BookStore
+from bookstore import Book, BookStore
 from menu import Menu
 import ui
 
 store = BookStore()
-
-QUIT = 'Q'
-
 
 def main():
 
@@ -17,7 +14,7 @@ def main():
         choice = ui.display_menu_get_choice(menu)
         action = menu.get_action(choice)
         action()
-        if choice == QUIT:
+        if choice == 'Q':
             break
 
 
@@ -29,14 +26,14 @@ def create_menu():
     menu.add_option('4', 'Show Read Books', show_read_books)
     menu.add_option('5', 'Show All Books', show_all_books)
     menu.add_option('6', 'Change Book Read Status', change_read)
-    menu.add_option(QUIT, 'Quit', quit_program)
+    menu.add_option('Q', 'Quit', quit_program)
 
     return menu
 
 
 def add_book():
     new_book = ui.get_book_info()
-    store.add_book(new_book)
+    new_book.save()
     # TODO show an error message if a book is already in the store, don't add book
 
 
@@ -64,14 +61,14 @@ def search_book():
 def change_read():
 
     book_id = ui.get_book_id()
-    new_read = ui.get_read_value()
-    store.set_book_read(book_id, new_read)
-    # TODO show error message if book's ID is not found.
-
+    book = store.get_book_by_id(book_id)
+    new_read = ui.get_read_value()      # TODO show error message if book's ID is not found.
+    book.read = new_read 
+    book.save()
+    
 
 def quit_program():
     ui.message('Thanks and bye!')
-
 
 
 if __name__ == '__main__':

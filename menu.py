@@ -1,4 +1,3 @@
-
 class Menu:
 
     """ Represents a set of menu options. Each option has a key or string the user

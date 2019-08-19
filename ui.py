@@ -1,4 +1,4 @@
-from model import Book
+from bookstore import Book
 
 
 def display_menu_get_choice(menu):

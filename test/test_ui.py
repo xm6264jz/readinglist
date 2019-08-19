@@ -1,11 +1,21 @@
 from unittest import TestCase
 from unittest.mock import patch
+
+import bookstore 
+from bookstore import Book, BookStore
+
 import ui
 from menu import Menu
-from model import Counter, Book
 
 
 class TestUI(TestCase):
+ 
+    @classmethod
+    def setUpClass(cls):
+        bookstore.db = 'database/test_books.db'
+        BookStore.instance = None 
+
+
 
     @patch('builtins.input', side_effect=['a'])
     @patch('builtins.print')
