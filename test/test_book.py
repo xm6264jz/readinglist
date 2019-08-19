@@ -37,6 +37,7 @@ class TestBook(TestCase):
         bk = Book('CCC', 'DDD', True)
         bk.save()
         
+        # Change some attributes and save 
         bk.author = 'EEE'
         bk.title = 'FFF'
         bk.read = False 
@@ -45,6 +46,7 @@ class TestBook(TestCase):
 
         store = BookStore()
         
+        # Check DB has same data as bk Book object 
         self.assertEqual(bk, store.get_book_by_id(bk.id))
         self.assertTrue(bk, store.exact_match(bk))
         

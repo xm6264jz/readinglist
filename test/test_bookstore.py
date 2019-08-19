@@ -3,9 +3,7 @@ from unittest import TestCase
 import bookstore 
 from bookstore import Book, BookStore, BookError
 
-
 class TestBookstore(TestCase):
-
 
     @classmethod
     def setUpClass(cls):
@@ -19,7 +17,6 @@ class TestBookstore(TestCase):
 
 
     def add_test_data(self):
-
         self.clear_bookstore()
 
         self.bk1 = Book('An Interesting Book', 'Ann Author', True)
@@ -92,8 +89,6 @@ class TestBookstore(TestCase):
         bk1.save()
         bk2.save()
 
-        # self.BS.add_book(bk1)
-        # self.BS.add_book(bk2)
         self.BS.delete_all_books()
         self.assertEqual(0, self.BS.book_count())
 
@@ -101,7 +96,6 @@ class TestBookstore(TestCase):
     def test_delete_all_books_empty(self):
         self.BS.delete_all_books()
         self.assertEqual(0, self.BS.book_count())
-
 
 
     def test_count_books(self):
@@ -114,8 +108,7 @@ class TestBookstore(TestCase):
         self.add_test_data()
         self.bk1.read = True
         self.bk1.save()
-        # self.BS.update_book(self.bk1)
-
+       
         bk1_from_store = self.BS.get_book_by_id(self.bk1.id)
         self.assertTrue(bk1_from_store.read)
 
@@ -124,9 +117,7 @@ class TestBookstore(TestCase):
         self.add_test_data()
         self.bk2.read = True 
         self.bk2.save()
-        #
-        # self.BS.update_book(self.bk2)
-
+        
         bk2_from_store = self.BS.get_book_by_id(self.bk2.id)
         self.assertTrue(bk2_from_store.read)
 
@@ -137,8 +128,6 @@ class TestBookstore(TestCase):
         self.bk1.read = False
         self.bk1.save()
 
-        # self.BS.update_book(self.bk1)
-
         bk1_from_store = self.BS.get_book_by_id(self.bk1.id)
         self.assertFalse(bk1_from_store.read)
 
@@ -147,8 +136,6 @@ class TestBookstore(TestCase):
         self.add_test_data()
         self.bk2.read = False 
         self.bk2.save()
-
-        # self.BS.update_book(self.bk2)
 
         bk2_from_store = self.BS.get_book_by_id(self.bk2.id)
         self.assertFalse(bk2_from_store.read)
@@ -180,10 +167,6 @@ class TestBookstore(TestCase):
 
     def test_search_book_author_match(self):
         self.add_test_data()
-
-        print('expect book 1 found', self.bk1)
-        print('found these', self.BS.book_search('Ann'))
-
         self.assertCountEqual([self.bk1], self.BS.book_search('Ann'))
 
 
