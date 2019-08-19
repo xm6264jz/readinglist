@@ -62,6 +62,19 @@ class TestBookstore(TestCase):
             bk_dupe.save()
        
 
+
+    def test_get_book_by_id_found(self):
+        self.add_test_data()
+        result = self.BS.get_book_by_id(bk1.id)
+        self.assertEqual(result, self.bk1)
+
+
+    def test_get_book_by_id_not_found(self):
+        self.add_test_data()
+        result = self.BS.get_book_by_id(-1)
+        self.assertIsNone(result)
+
+
     def test_delete_book(self):
         self.add_test_data()
         count = self.BS.book_count()

@@ -48,6 +48,7 @@ class TestUI(TestCase):
         bk2 = Book('b', 'bbb')
         books = [bk1, bk2]
         ui.show_books(books)
+
         mock_print.assert_any_call(bk1)
         mock_print.assert_any_call(bk2)
 
