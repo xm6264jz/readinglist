@@ -38,6 +38,7 @@ class Book:
         if isinstance(self, other.__class__):
             return self.id == other.id and self.title == other.title and self.author == other.author and self.read == other.read 
         return False 
+        
 
     def __ne__(self, other):
         """ Overrides the != operator """
@@ -81,7 +82,7 @@ class BookStore:
 
             # Raise BookError if book with same author and title is already in list. New book is not added.
             if self.exact_match(book):
-                raise BookError(f'{book} is already in the store.')
+                raise BookError(f'This book is already in the store. {book}')
 
             insert_sql = 'INSERT INTO books (title, author, read) VALUES (?, ?, ?)'
 
@@ -164,7 +165,6 @@ class BookStore:
                 rows = con.execute(find_exact_match_sql, (search_book.title, search_book.author) )
                 the_row = rows.fetchone()
                 found = the_row is not None
-                print('\nsearch', search_book, 'found? ', found, the_row)
 
             con.close() 
 

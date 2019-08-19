@@ -65,7 +65,7 @@ class TestBookstore(TestCase):
 
     def test_get_book_by_id_found(self):
         self.add_test_data()
-        result = self.BS.get_book_by_id(bk1.id)
+        result = self.BS.get_book_by_id(self.bk1.id)
         self.assertEqual(result, self.bk1)
 
 
