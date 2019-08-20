@@ -86,9 +86,7 @@ class BookStore:
 
             insert_sql = 'INSERT INTO books (title, author, read) VALUES (?, ?, ?)'
 
-            con = sqlite3.connect(db)
-
-            with con:
+            with sqlite3.connect(db) as con:
                 res = con.execute(insert_sql, (book.title, book.author, book.read) )
                 new_id = res.lastrowid  # Get the ID of the new row in the table 
                     
@@ -103,9 +101,7 @@ class BookStore:
 
             delete_sql = 'DELETE FROM books WHERE rowid = ?'
 
-            con = sqlite3.connect(db)
-
-            with con:
+            with sqlite3.connect(db) as con:
                 deleted = con.execute(delete_sql, (book.id, ) )
                 deleted_count = deleted.rowcount  # rowcount = how many rows affected by the query
             con.close()
@@ -119,10 +115,9 @@ class BookStore:
 
             delete_all_sql = "DELETE FROM books"
 
-            con = sqlite3.connect(db)
-
-            with con:
+            with sqlite3.connect(db) as con:
                 deleted = con.execute(delete_all_sql)
+
             con.close()
            
 
@@ -137,14 +132,11 @@ class BookStore:
 
             update_read_sql = 'UPDATE books SET title = ?, author = ?, read = ? WHERE rowid = ?'
 
-            con = sqlite3.connect(db)
-            
-            with con:
+            with sqlite3.connect(db) as con:
                 updated = con.execute(update_read_sql, (book.title, book.author, book.read, book.id) )
                 rows_modfied = updated.rowcount
                 
             con.close()
-
             
             # TODO raise BookError if book not found.
             if rows_modfied == 0:
@@ -161,7 +153,7 @@ class BookStore:
             
             con = sqlite3.connect(db)
 
-            with con:
+            with sqlite3.connect(db) as con:
                 rows = con.execute(find_exact_match_sql, (search_book.title, search_book.author) )
                 the_row = rows.fetchone()
                 found = the_row is not None
@@ -179,10 +171,8 @@ class BookStore:
          
             get_book_by_id_sql = 'SELECT rowid, * FROM books WHERE rowid = ?'
 
-            con = sqlite3.connect(db)
-            con.row_factory = sqlite3.Row  # This row_factory allows access to data by row name 
-
-            with con:
+            with sqlite3.connect(db) as con:
+                con.row_factory = sqlite3.Row  # This row_factory allows access to data by row name 
                 rows = con.execute(get_book_by_id_sql, (id,) )
                 book_data = rows.fetchone()  # Get first result 
                 
@@ -191,8 +181,6 @@ class BookStore:
                    
             con.close()            
             
-            # TODO issue # 2 
-
             return book 
 
 
@@ -205,12 +193,10 @@ class BookStore:
  
             search_sql = 'SELECT rowid, * FROM books WHERE UPPER(title) like UPPER(?) OR UPPER(author) like UPPER(?)'
 
-            con = sqlite3.connect(db)
-            con.row_factory = sqlite3.Row
-
             search = f'%{term}%'   # Example - if searching for text with 'bOb' in then use '%bOb%' in SQL
 
-            with con:
+            with sqlite3.connect(db) as con:
+                con.row_factory = sqlite3.Row
                 rows = con.execute(search_sql, (search, search) )
                 books = []
                 for r in rows:
@@ -230,10 +216,8 @@ class BookStore:
 
             get_book_by_id_sql = 'SELECT rowid, * FROM books WHERE read = ?'
 
-            con = sqlite3.connect(db)
-            con.row_factory = sqlite3.Row
-
-            with con:
+            with sqlite3.connect(db) as con:
+                con.row_factory = sqlite3.Row
                 rows = con.execute(get_book_by_id_sql, (read, ) )
                 
                 books = []
@@ -252,10 +236,8 @@ class BookStore:
     
             get_all_books_sql = 'SELECT rowid, * FROM books'
 
-            con = sqlite3.connect(db)
-            con.row_factory = sqlite3.Row
-
-            with con:
+            with sqlite3.connect(db) as con:
+                con.row_factory = sqlite3.Row
                 rows = con.execute(get_all_books_sql)
                 books = []
 
@@ -273,9 +255,7 @@ class BookStore:
             
             count_books_sql = 'SELECT COUNT(*) FROM books'
 
-            con = sqlite3.connect(db)
-
-            with con:
+            with sqlite3.connect(db) as con:
                 count = con.execute(count_books_sql)
                 total = count.fetchone()[0]    # fetchone() returns the first row of the results. This is a tuple with one element - the count 
             con.close()            
