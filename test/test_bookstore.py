@@ -62,6 +62,14 @@ class TestBookstore(TestCase):
             bk_dupe.save()
        
 
+    def test_add_book_duplicate_errors_case_insensitive(self):
+        bk = Book('a', 'a')
+        bk.save()
+        with self.assertRaises(BookError):
+            bk_dupe = Book('a', 'A')
+            bk_dupe.save()
+
+
     def test_get_book_by_id_found(self):
         self.add_test_data()
         result = self.BS.get_book_by_id(self.bk1.id)

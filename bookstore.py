@@ -64,7 +64,7 @@ class BookStore:
     class __BookStore:
 
         def __init__(self):
-            create_table_sql = 'CREATE TABLE IF NOT EXISTS books (title TEXT, author TEXT, read BOOLEAN)'
+            create_table_sql = 'CREATE TABLE IF NOT EXISTS books (title TEXT, author TEXT, read BOOLEAN, UNIQUE( title COLLATE NOCASE, author COLLATE NOCASE))'
         
             con = sqlite3.connect(db)
         
@@ -78,23 +78,20 @@ class BookStore:
             """ Adds book to store. 
             Raises BookError if a book with exact author and title (not case sensitive) is already in the store.
             :param book the Book to add """
-
-
-            # Raise BookError if book with same author and title is already in list. New book is not added.
-            if self.exact_match(book):
-                raise BookError(f'This book is already in the store. {book}')
-
+            
             insert_sql = 'INSERT INTO books (title, author, read) VALUES (?, ?, ?)'
 
-            with sqlite3.connect(db) as con:
-                res = con.execute(insert_sql, (book.title, book.author, book.read) )
-                new_id = res.lastrowid  # Get the ID of the new row in the table 
-                    
-            con.close()
+            try: 
+                with sqlite3.connect(db) as con:
+                    res = con.execute(insert_sql, (book.title, book.author, book.read) )
+                    new_id = res.lastrowid  # Get the ID of the new row in the table 
+                    book.id = new_id  # Set this book's ID
+            except sqlite3.IntegrityError as e:
+                raise BookError(f'Error - this book is already in the database. {book}') from e
+            finally:
+                con.close()
 
-            book.id = new_id  # Set this book's ID
             
-
         def delete_book(self, book):
             """ Removes book from store. Raises BookError if book not in store. 
             :param book the Book to delete """
@@ -155,8 +152,8 @@ class BookStore:
 
             con = sqlite3.connect(db) 
             rows = con.execute(find_exact_match_sql, (search_book.title, search_book.author) )
-            the_row = rows.fetchone()
-            found = the_row is not None
+            first_book = rows.fetchone()
+            found = first_book is not None
 
             con.close() 
 
