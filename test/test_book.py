@@ -1,4 +1,6 @@
 from unittest import TestCase
+import os 
+
 import bookstore
 from bookstore import Book, BookStore
 
@@ -7,7 +9,7 @@ class TestBook(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        bookstore.db = 'database/test_books.db'
+        bookstore.db = os.path.join('database', 'test_books.db')
         BookStore.instance = None 
 
 
