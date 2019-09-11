@@ -25,6 +25,7 @@ class Book:
             self.bookstore._add_book(self)
 
 
+
     def __str__(self):
         read_status = 'have' if self.read else 'have not'
         return f'ID {self.id}, Title: {self.title}, Author: {self.author}. You {read_status} read this book.'
@@ -75,6 +76,18 @@ class BookStore:
             con.close()
             
 
+        # method names prefaced by _ indicate that they are only to be used internally. There's nothing stopping anything else
+        # calling _add_book and _update_book but it would go against the intentions of the program to do so. 
+        # _add_book and _update book are called by the Book class's save method, and are used to create or update a book's info in the database.
+        # When the program works with books, to save or update, a new Book object is created and the save method is called, for example
+        # book = Book('Author', 'Title')
+        # book.save()
+        # Or to modify
+        # book.title = 'Another Author'
+        # book.save()
+        # Operations on the database where the user may not have a book object, have 'public' names like delete_all_books() or get_book_by_id
+
+
         def _add_book(self, book):
             """ Adds book to store. 
             Raises BookError if a book with exact author and title (not case sensitive) is already in the store.
@@ -91,6 +104,27 @@ class BookStore:
                 raise BookError(f'Error - this book is already in the database. {book}') from e
             finally:
                 con.close()
+
+
+        def _update_book(self, book):
+            """ Updates the information for a book. Assumes id has not changed and updates author, title and read values
+            Raises BookError if book does not have id
+            :param book the Book to update 
+            """
+            
+            if not book.id:
+                raise BookError('Book does not have ID, can\'t update')
+
+            update_read_sql = 'UPDATE books SET title = ?, author = ?, read = ? WHERE rowid = ?'
+
+            with sqlite3.connect(db) as con:
+                updated = con.execute(update_read_sql, (book.title, book.author, book.read, book.id) )
+                rows_modfied = updated.rowcount
+                
+            con.close()
+            
+            if rows_modfied == 0:
+                raise BookError(f'Book with id {book.id} not found')
 
             
         def delete_book(self, book):
@@ -118,28 +152,6 @@ class BookStore:
 
             con.close()
            
-
-        def _update_book(self, book):
-            """ Updates the information for a book. Assumes id has not changed and updates author, title and read values
-            Raises BookError if book does not have id
-            :param book the Book to update 
-            """
-            
-            if not book.id:
-                raise BookError('Book does not have ID, can\'t update')
-
-            update_read_sql = 'UPDATE books SET title = ?, author = ?, read = ? WHERE rowid = ?'
-
-            with sqlite3.connect(db) as con:
-                updated = con.execute(update_read_sql, (book.title, book.author, book.read, book.id) )
-                rows_modfied = updated.rowcount
-                
-            con.close()
-            
-            # TODO raise BookError if book not found.
-            if rows_modfied == 0:
-                raise BookError(f'Book with id {book.id} not found')
-
 
 
         def exact_match(self, search_book):
