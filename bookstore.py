@@ -25,6 +25,9 @@ class Book:
             self.bookstore._add_book(self)
 
 
+    def delete(self):
+        self.bookstore._delete_book(self)
+
 
     def __str__(self):
         read_status = 'have' if self.read else 'have not'
@@ -127,14 +130,17 @@ class BookStore:
                 raise BookError(f'Book with id {book.id} not found')
 
             
-        def delete_book(self, id):
+        def _delete_book(self, book):
             """ Removes book from store. Raises BookError if book not in store. 
             :param book the Book to delete """
+
+            if not book.id:
+                raise BookError('Book does not have ID')
 
             delete_sql = 'DELETE FROM books WHERE rowid = ?'
 
             with sqlite3.connect(db) as con:
-                deleted = con.execute(delete_sql, (id, ) )
+                deleted = con.execute(delete_sql, (book.id, ) )
                 deleted_count = deleted.rowcount  # rowcount = how many rows affected by the query
             con.close()
 

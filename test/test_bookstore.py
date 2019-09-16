@@ -84,10 +84,10 @@ class TestBookstore(TestCase):
         self.assertIsNone(result)
 
 
-    def test_delete_book(self):
+    def test_delete_book_object(self):
         self.add_test_data()
         count = self.BS.book_count()
-        self.BS.delete_book(self.bk2.id)
+        self.bk2.delete()
         self.assertEqual(count - 1, self.BS.book_count())
         self.assertFalse(self.BS.exact_match(self.bk2))
 
@@ -96,13 +96,13 @@ class TestBookstore(TestCase):
         self.add_test_data()
         bk = Book('Not in store', 'Not in store')
         with self.assertRaises(BookError):
-            self.BS.delete_book(-10)
+            bk.delete()
 
 
     def test_delete_book_empty_list_errors(self):
         bk = Book('Not in store', 'Not in store')
         with self.assertRaises(BookError):
-            self.BS.delete_book(-100)
+            bk.delete()
 
 
     def test_delete_all_books(self):
