@@ -7,6 +7,7 @@ class Menu:
     def __init__(self):
         self.text_descriptions = {}
         self.functions = {}
+        self.original_keys = {}
 
 
     def add_option(self, key, description, func):
@@ -15,24 +16,28 @@ class Menu:
         :param key: the key the user should press to select this option. Can be a single character or a string
         :param description: a text description of the menu option
         :param func: the function that should be invoked when the user selects this option """
+        original_key = key
+        key = key.lower()
         self.text_descriptions[key] = description
         self.functions[key] = func
+        self.original_keys[key] = original_key
+
 
 
     def is_valid(self, choice):
         """ Verifies if a choice is one of the menu options
         :param choice: the choice to check
         :returns: True if the choice is a key in the menu options, False otherwise  """
-        return choice in self.text_descriptions
+        return choice.lower() in self.text_descriptions
 
 
     def get_action(self, choice):
         """ :returns: the function to invoke for the menu choice, or None if not found """
-        return self.functions.get(choice)
+        return self.functions.get(choice.lower())
 
 
     def __str__(self):
         """ :returns: all the menu options and their descriptions, one per line. """
-        texts = [f'{key}: {self.text_descriptions[key]}' for key in self.text_descriptions.keys()]
+        texts = [f'{self.original_keys[key]}: {self.text_descriptions[key]}' for key in self.text_descriptions.keys()]
         return '\n'.join(texts)
 
