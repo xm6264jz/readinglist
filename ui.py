@@ -24,14 +24,14 @@ def show_books(books):
     """ Display all books in a list of Books, or a 'No books' message
      :param books: the book list """
 
-    # TODO print a blank line before and after the book list or no books message
-
+    
+    print()
     if books:
         for book in books:
             print(book)
     else:
         print('No books to display')
-
+    print()
 
 def get_book_info():
     """ Create a new Book from title and author provided by user
