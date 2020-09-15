@@ -19,8 +19,8 @@ class Book:
 
 
     def save(self):
-      '''Saves a new book to the database if the Book object does not have an Book.id property. If the Book object
-      does have a Book.id property then calling save() will update the database entry for the Book.id'''
+        '''Saves a new book to the database if the Book object does not have an Book.id property. If the Book object
+        does have a Book.id property then calling save() will update the database entry for the Book.id'''
         if self.id:
             self.bookstore._update_book(self)
         else:
