@@ -26,6 +26,8 @@ def create_menu():
     menu.add_option('4', 'Show Read Books', show_read_books)
     menu.add_option('5', 'Show All Books', show_all_books)
     menu.add_option('6', 'Change Book Read Status', change_read)
+  
+
     menu.add_option('Q', 'Quit', quit_program)
 
     return menu
@@ -68,7 +70,8 @@ def change_read():
     book.read = new_read
     ui.message(f"You have {'read' if book.read else 'not read' } \"{book.title}\" by {book.author}")
     book.save()
-    
+
+     
 
 def quit_program():
     ui.message('Thanks and bye!')
