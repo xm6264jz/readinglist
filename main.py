@@ -26,6 +26,7 @@ def create_menu():
     menu.add_option('4', 'Show Read Books', show_read_books)
     menu.add_option('5', 'Show All Books', show_all_books)
     menu.add_option('6', 'Change Book Read Status', change_read)
+    menu.add_option('7', 'Delete Book From Store', delete_book)
     menu.add_option('Q', 'Quit', quit_program)
 
     return menu
@@ -48,6 +49,14 @@ def show_unread_books():
     unread_books = store.get_books_by_read_value(False)
     ui.show_books(unread_books)
 
+def delete_book():
+    try:
+        Id = ui.get_book_id()
+        book = store.get_book_by_id(Id)
+        Book.delete(book)
+        ui.message('Book deleted successfully')
+    except:
+        ui.message("Error!!! Book Not Found in Store")    
 
 def show_all_books():
     books = store.get_all_books()
@@ -68,7 +77,8 @@ def change_read():
     book.read = new_read
     ui.message(f"You have {'read' if book.read else 'not read' } \"{book.title}\" by {book.author}")
     book.save()
-    
+
+     
 
 def quit_program():
     ui.message('Thanks and bye!')
