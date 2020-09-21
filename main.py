@@ -70,13 +70,15 @@ def search_book():
 
 
 def change_read():
-
-    book_id = ui.get_book_id()
-    book = store.get_book_by_id(book_id)
-    new_read = ui.get_read_value()
-    book.read = new_read
-    ui.message(f"You have {'read' if book.read else 'not read' } \"{book.title}\" by {book.author}")
-    book.save()
+    try:
+        book_id = ui.get_book_id()
+        book = store.get_book_by_id(book_id)
+        new_read = ui.get_read_value()
+        book.read = new_read
+        ui.message(f"You have {'read' if book.read else 'not read' } \"{book.title}\" by {book.author}")
+        book.save()
+    except:
+        ui.message("A book with that ID does not exist in the database")    
 
      
 
